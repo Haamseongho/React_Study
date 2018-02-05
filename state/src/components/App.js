@@ -17,6 +17,8 @@ class Counter extends React.Component {
     // 작업하기 때문에 handleClick에서의 this는 외부에서 설정한 this 와 동일해지고
     // 그에 따라 State를 재 설정 가능한 것입니다.
     // onClick 이벤트에서 바인딩 할 수 있지만 이를 constructor에서 해주면 좀 더 깔끔합니다.
+
+
     handleClick() { // this.state.value = this.state.value + 1 >> 이런 식으로는 작업하지 말 것 (강제로 바꿔야 하기 때문)
         this.setState({
             value: this.state.value + 1
@@ -27,7 +29,7 @@ class Counter extends React.Component {
         return (
             <div>
                 <h2>{this.state.value}</h2>
-                <button onClick={this.handleClick}>Press Me</button>
+                <button onClick={this.handleClick}>누르셈!</button>
             </div>
         )
     }
