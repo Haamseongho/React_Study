@@ -6,6 +6,8 @@ class App extends React.Component {
             <div>
                 <h1>{this.props.propName}</h1>
                 <div>{this.props.children}</div>
+
+
                 <div>{this.props.value}</div>
                 <div>{this.props.children}</div>
                 <div>{this.props.secondValue}</div>

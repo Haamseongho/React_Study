@@ -49,7 +49,4 @@ class App extends React.Component {
     }
 };
 
-ReactDOM.render(
-    <App></App>,
-    document.getElementById("root")
-);
+module.exports = App;
