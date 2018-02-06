@@ -129,7 +129,7 @@
 
 
 		
-	export default class Contact extends React.Component {
+    export default class Contact extends React.Component {
     	constructor(props) {
         	super(props);
         	this.state = {
@@ -215,7 +215,7 @@ state 값 keyword를 constructor에 다음과 같이 선언해준다.
 
 ```
 
-	 constructor(props) {
+    constructor(props) {
         super(props);
         this.state = {
             keyword: "", 
@@ -250,11 +250,11 @@ keyword 값은 내용이 입력될 때마다 바껴야 하기 때문에
 ```
 
 	handleChange(e){
-        // e >> event 객체
-        this.setState({
-            keyword : e.target.value
-        })
-    }
+            // e >> event 객체
+            this.setState({
+           	keyword : e.target.value
+            })
+         }
 
 
 ```
@@ -264,18 +264,18 @@ keyword 값은 내용이 입력될 때마다 바껴야 하기 때문에
 ```
 
 
-	 		<div>
-                <h1>Contacts</h1>
-                <input
-                    name="keyword"
-                    placeholder="Search"
-                    value = {this.state.keyword}
-                    onChange = {this.handleChange}
-                    // onChange는 자바스크립트 함수! (값이 변화할 때 호출되는 메소드)
+	 	<div>
+                   <h1>Contacts</h1>
+                   <input
+                       name="keyword"
+                       placeholder="Search"
+                       value = {this.state.keyword}
+                       onChange = {this.handleChange}
+                       // onChange는 자바스크립트 함수! (값이 변화할 때 호출되는 메소드)
 
-                />
-                <div>{mapToComponent(this.state.contactData)}</div>
-            </div>
+                   />
+                   <div>{mapToComponent(this.state.contactData)}</div>
+               </div>
 
 
 ```
@@ -294,7 +294,7 @@ sort , filter 적용 (검색 기능)
 
 ```
 
-	  const mapToComponent = (data) => {
+	const mapToComponent = (data) => {
             data.sort(); // 입력 받는 걸 오름차순으로 바꾸기!!
             data = data.filter( (contact) => {
                 return contact.name.toLowerCase()
