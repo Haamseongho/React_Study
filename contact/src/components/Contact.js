@@ -10,19 +10,19 @@ export default class Contact extends React.Component {
             // 부작용 : react한 loader는 component가 수정 되어서 reloading 될 때
             // constructor 실행 하지 않음 .
             contactData: [{
-                name: 'A',
+                name: 'aspect',
                 phone: '000-0000-0001'
             },
                 {
-                    name: 'B',
+                    name: 'browny',
                     phone: '000-0000-0002'
                 },
                 {
-                    name: 'C',
+                    name: 'cerkein',
                     phone: '000-0000-0003'
                 },
                 {
-                    name: 'D',
+                    name: 'dramatic',
                     phone: '000-0000-0004'
                 }]
         };
@@ -36,14 +36,23 @@ export default class Contact extends React.Component {
         // 바인딩은 필수로 해주기 !!
     }
 
-    handleChange(e){
+    handleChange(e) {
         // e >> event 객체
         this.setState({
-            keyword : e.target.value
+            keyword: e.target.value
         })
     }
-    render(){
-        
+
+    render() {
+        const mapToComponent = (data) =>{
+            data.sort((a,b) => { return a.name > b.name;});
+            data = data.filter((contact) => {
+                return contact.name.toLowerCase().indexOf(this.state.keyword) > -1;
+            });
+            return data.map((contact,i) => {
+                return (<ContactInfo contact = {contact} key = {i}/>);
+            });
+        };
 
         return (
             <div>
@@ -51,8 +60,8 @@ export default class Contact extends React.Component {
                 <input
                     name="keyword"
                     placeholder="Search"
-                    value = {this.state.keyword}
-                    onChange = {this.handleChange}
+                    value={this.state.keyword}
+                    onChange={this.handleChange}
                     // onChange는 자바스크립트 함수! (값이 변화할 때 호출되는 메소드)
 
                 />
