@@ -1,5 +1,6 @@
 import React from 'react';
 import ContactInfo from './ContactInfo';
+import ContactDetails from './ContactDetails';
 
 export default class Contact extends React.Component {
     constructor(props) {
@@ -34,23 +35,37 @@ export default class Contact extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         // 바인딩은 필수로 해주기 !!
+        this.handleClick = this.handleClick.bind(this);
+        // 함수 사용 시 바인딩은 필수
     }
 
     handleChange(e) {
         // e >> event 객체
         this.setState({
             keyword: e.target.value
-        })
+        });
+
+    }
+
+    handleClick(key){
+        this.setState({
+            selectedKey : key
+        });
+
+        console.log(key);
     }
 
     render() {
         const mapToComponent = (data) =>{
             data.sort((a,b) => { return a.name > b.name;});
-            data = data.filter((contact) => {
-                return contact.name.toLowerCase().indexOf(this.state.keyword) > -1;
+            data = data.filter((contact2) => {
+                return contact2.name.toLowerCase().indexOf(this.state.keyword) > -1;
             });
             return data.map((contact,i) => {
-                return (<ContactInfo contact = {contact} key = {i}/>);
+                return (<ContactInfo
+                                contact = {contact}
+                                key = {i}
+                                onClick={()=> this.handleClick(i)}/>);
             });
         };
 
@@ -66,6 +81,9 @@ export default class Contact extends React.Component {
 
                 />
                 <div>{mapToComponent(this.state.contactData)}</div>
+                <ContactDetails
+                    isSelected = {this.state.selectedKey != -1}
+                    contact = {this.state.contactData[this.state.selectedKey]} />
             </div>
         );
     }
