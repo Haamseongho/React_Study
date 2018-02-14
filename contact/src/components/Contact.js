@@ -1,6 +1,8 @@
 import React from 'react';
 import ContactInfo from './ContactInfo';
 import ContactDetails from './ContactDetails';
+import update from 'react-addons-update';
+
 
 export default class Contact extends React.Component {
     constructor(props) {
@@ -10,6 +12,7 @@ export default class Contact extends React.Component {
             // react-loader >> component가 수정되어서 reloading 될 때 state를 파괴하지 않고 유지 시켜줌
             // 부작용 : react한 loader는 component가 수정 되어서 reloading 될 때
             // constructor 실행 하지 않음 .
+            selectedKey : "",
             contactData: [{
                 name: 'aspect',
                 phone: '000-0000-0001'
@@ -37,7 +40,14 @@ export default class Contact extends React.Component {
         // 바인딩은 필수로 해주기 !!
         this.handleClick = this.handleClick.bind(this);
         // 함수 사용 시 바인딩은 필수
+        this.handleCreate = this.handleCreate.bind(this);
+        // 데이터 추가
+        this.handleRemove = this.handleRemove.bind(this);
+        // 데이터 제거
+        this.handleEdit = this.handleEdit.bind(this);
+        // 데이터 수정
     }
+
 
     handleChange(e) {
         // e >> event 객체
@@ -54,6 +64,41 @@ export default class Contact extends React.Component {
 
         console.log(key);
     }
+
+    handleCreate(contact){
+        this.setState({
+            contactData : update(this.state.contactData,
+                {
+                    $push : [contact]
+                })
+        })
+    }
+    // parameter 없어도 됨 >> selectedKey 삭제할 때 쓸 예정
+    handleRemove(){
+        this.setState({
+            contactData : update(this.state.contactData,
+                {
+                    //배열의 배열을 전달해줘야 함!
+                    $splice: [[this.state.selectedKey,1]]
+                }),
+            selectedKey : -1 // 무효화
+        })
+    }
+
+    // 이름, 전화번호 변경
+    handleEdit(name,phone){
+        this.setState({
+            contactData : update(this.state.contactData,
+                {
+                    // 선택된 키의 인덱스 값의 아이템을 수정하겠다.
+                    [this.state.selectedKey] : {
+                        name : {$set : name},
+                        phone : {$set : phone}
+                    }
+                })
+        })
+    }
+
 
     render() {
         const mapToComponent = (data) =>{
