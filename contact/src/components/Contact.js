@@ -2,6 +2,7 @@ import React from 'react';
 import ContactInfo from './ContactInfo';
 import ContactDetails from './ContactDetails';
 import update from 'react-addons-update';
+import ContactCreate from './ContactCreate';
 
 
 export default class Contact extends React.Component {
@@ -12,7 +13,7 @@ export default class Contact extends React.Component {
             // react-loader >> component가 수정되어서 reloading 될 때 state를 파괴하지 않고 유지 시켜줌
             // 부작용 : react한 loader는 component가 수정 되어서 reloading 될 때
             // constructor 실행 하지 않음 .
-            selectedKey : "",
+            selectedKey: "",
             contactData: [{
                 name: 'aspect',
                 phone: '000-0000-0001'
@@ -57,43 +58,48 @@ export default class Contact extends React.Component {
 
     }
 
-    handleClick(key){
+    handleClick(key) {
         this.setState({
-            selectedKey : key
+            selectedKey: key
         });
 
         console.log(key);
     }
 
-    handleCreate(contact){
+    handleCreate(contact) {
         this.setState({
-            contactData : update(this.state.contactData,
+            contactData: update(this.state.contactData,
                 {
-                    $push : [contact]
+                    $push: [contact]
                 })
         })
     }
+
     // parameter 없어도 됨 >> selectedKey 삭제할 때 쓸 예정
-    handleRemove(){
+    handleRemove() {
+        if(this.state.selectedKey < 0){
+            // 0보다 작으면 아무것도 선택되지 않은 것
+            return;
+        }
         this.setState({
-            contactData : update(this.state.contactData,
+            contactData: update(this.state.contactData,
                 {
                     //배열의 배열을 전달해줘야 함!
-                    $splice: [[this.state.selectedKey,1]]
+                    $splice: [[this.state.selectedKey, 1]]
                 }),
-            selectedKey : -1 // 무효화
+            selectedKey: -1 // 무효화
         })
     }
 
     // 이름, 전화번호 변경
-    handleEdit(name,phone){
+    handleEdit(name, phone) {
         this.setState({
-            contactData : update(this.state.contactData,
+            contactData: update(this.state.contactData,
                 {
                     // 선택된 키의 인덱스 값의 아이템을 수정하겠다.
-                    [this.state.selectedKey] : {
-                        name : {$set : name},
-                        phone : {$set : phone}
+                    [this.state.selectedKey]: {
+                        name: {$set: name},
+                        phone: {$set: phone}
                     }
                 })
         })
@@ -101,16 +107,18 @@ export default class Contact extends React.Component {
 
 
     render() {
-        const mapToComponent = (data) =>{
-            data.sort((a,b) => { return a.name > b.name;});
+        const mapToComponent = (data) => {
+            data.sort((a, b) => {
+                return a.name > b.name;
+            });
             data = data.filter((contact2) => {
                 return contact2.name.toLowerCase().indexOf(this.state.keyword) > -1;
             });
-            return data.map((contact,i) => {
+            return data.map((contact, i) => {
                 return (<ContactInfo
-                                contact = {contact}
-                                key = {i}
-                                onClick={()=> this.handleClick(i)}/>);
+                    contact={contact}
+                    key={i}
+                    onClick={() => this.handleClick(i)}/>);
             });
         };
 
@@ -127,9 +135,21 @@ export default class Contact extends React.Component {
                 />
                 <div>{mapToComponent(this.state.contactData)}</div>
                 <ContactDetails
-                    isSelected = {this.state.selectedKey != -1}
-                    contact = {this.state.contactData[this.state.selectedKey]} />
+                    isSelected={this.state.selectedKey != -1}
+                    onRemove={this.handleRemove}
+                    onEdit = {this.handleEdit}
+                />
+
+                <ContactCreate onCreate={this.handleCreate}/>
             </div>
         );
     }
+
+    /*
+               ContactCreate의 props로 onCreate변수를 선언했고 이는
+               handleCreate 함수 임을 명시한다.
+               ContactCreate 클래스에선 onCreate 메소드를 props로 선언해야하고
+               default값도 정의해줘야한다.
+
+                */
 }
