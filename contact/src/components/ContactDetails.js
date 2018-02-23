@@ -13,14 +13,15 @@ export default class ContactDetails extends React.Component {
         this.handleToggle = this.handleToggle.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
 
     handleToggle() {
-        if(!this.state.isEdit){
+        if (!this.state.isEdit) {
             this.setState({
-                name : this.props.contact.name,
-                phone : this.props.contact.phone
+                name: this.props.contact.name,
+                phone: this.props.contact.phone
             });
         } else {
             this.handleEdit();
@@ -35,12 +36,19 @@ export default class ContactDetails extends React.Component {
     handleChange(e) {
         let nextState = {}; // 여러개 인풋 처리 가능
         // e.target.name --> 여기 name 은 input 데이터의 name 이므로 (name ,phone) 이 됩니다.
+        console.log(e.target.name+"/"+e.target.value);
         nextState[e.target.name] = e.target.value;
         this.setState(nextState);
     }
 
-    handleEdit(){
-        this.props.onEdit(this.state.name,this.state.phone);
+    handleEdit() {
+        this.props.onEdit(this.state.name, this.state.phone);
+    }
+
+    handleKeyPress(e) {
+        if (e.charCode === 13) {
+            this.handleToggle();
+        }
     }
 
 
@@ -60,14 +68,16 @@ export default class ContactDetails extends React.Component {
                            name="name"
                            placeholder="name"
                            value={this.state.name}
-                           onChange={this.handleChange}/>
+                           onChange={this.handleChange}
+                           onKeyPress={this.handleKeyPress}/>
                 </p>
                 <p>
                     <input type="text"
                            name="phone"
                            placeholder="phone"
                            value={this.state.phone}
-                           onChange={this.handleChange}/>
+                           onChange={this.handleChange}
+                           onKeyPress={this.handleKeyPress}/>
                 </p>
             </div>
         );
@@ -96,13 +106,13 @@ ContactDetails.defaultProps = {
     onRemove: () => {
         console.error("remove error");
     },
-    handleEdit : () => {
+    handleEdit: () => {
         console.error("edit error");
     }
 };
 
 ContactDetails.propTypes = {
-    contact : propTypes.object,
-    onRemove : propTypes.func,
-    handleEdit : propTypes.func
+    contact: propTypes.object,
+    onRemove: propTypes.func,
+    handleEdit: propTypes.func
 };

@@ -9,8 +9,11 @@ export default class ContactCreate extends React.Component {
             phone: "",
         };
 
+
+
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     // 변동 사항 정리해서 주기
@@ -34,7 +37,16 @@ export default class ContactCreate extends React.Component {
         this.setState({
             name: "",
             phone: ""
-        })
+        });
+        this.nameInput.focus();
+    }
+
+    handleKeyPress(e) {
+        // event
+        if (e.key === "Enter") {
+            // charCode >> 엔터
+            this.handleClick();
+        }
     }
 
 
@@ -47,14 +59,16 @@ export default class ContactCreate extends React.Component {
                            name="name"
                            placeholder="name"
                            value={this.state.name}
-                           onChange={this.handleChange}/>
+                           onChange={this.handleChange}
+                           ref={(ref) => this.nameInput = ref}/>
                 </p>
                 <p>
                     <input type="text"
                            name="phone"
                            placeholder="phone"
                            value={this.state.phone}
-                           onChange={this.handleChange}/>
+                           onChange={this.handleChange}
+                           onKeyPress={this.handleKeyPress}/>
                 </p>
                 <button onClick={this.handleClick}>Create</button>
             </div>
