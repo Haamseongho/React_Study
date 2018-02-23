@@ -105,6 +105,28 @@ export default class Contact extends React.Component {
         })
     }
 
+    // 컴포넌트가 DOM 위에 생기기 전에 (마운트 되기 전)
+    // DOM 위에 마운트 되기 전에 localStorage를 먼저 확인 하고 거기에 값이 있을 경우
+    // contactData에 값을 변경해준다.
+    // localStorage에 미리 내용이 있으면 DOM에 마운트 되기 전에 먼저 찾아올 수 있음
+    componentWillMount(){
+        const contactData = localStorage.contactData;
+        if(contactData){
+            // 존재할 경우
+            this.setState({
+                contactData : JSON.parse(contactData) // contactData가 존재하면 String 형태의 내용을 객체 형태로 변경
+            })
+        }
+    }
+    // 컴포넌트가 리렌더링 이 후에 나오는 메소드 (업데이트 완료)
+    componentDidUpdate(prevProps,prevState){
+        if(JSON.stringify(prevState.contactData) != JSON.stringify(this.state.contactData)){
+            // 이전 값과 지금 값이 일치하지 않을 경우
+            localStorage.contactData = JSON.stringify(this.state.contactData);
+            // 로컬 스토리지에 있는 데이터에 현재 데이터를 넣겠다.
+        }
+    }
+
 
     render() {
         const mapToComponent = (data) => {
